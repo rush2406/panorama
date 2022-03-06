@@ -37,4 +37,4 @@ for image in images:
 result = simple_blending(images)
 
 os.makedirs(os.path.join("./", "results"), exist_ok=True)
-cv2.imwrite(os.path.join("./", "results", f"pano_{i}.jpg"), result)
+cv2.imwrite(os.path.join("./", "results", f"pano.jpg"), result)
