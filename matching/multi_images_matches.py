@@ -1,7 +1,5 @@
 from typing import List
-
 import cv2
-
 from images import Image
 from matching.pair_match import PairMatch
 
@@ -47,24 +45,9 @@ class MultiImageMatches:
 
     def get_pair_matches(self, max_images: int = 6) -> List[PairMatch]:
         """
-        Get the pair matches for the given images.
-
-        Parameters
-        ----------
-        max_images : int, optional
-            Number of matches maximum for each image, by default 6
-
-        Returns
-        -------
-        pair_matches : List[PairMatch]
-            List of pair matches.
+        Get the pair matches for the given images
         """
-        pair_matches = []
-        pair_match = PairMatch(self.images[0], self.images[1], self.get_matches(self.images[0], self.images[1]))
-        if pair_match.is_valid():
-            pair_matches.append(pair_match)
-
-        return pair_matches
+        return PairMatch(self.images[0], self.images[1], self.get_matches(self.images[0], self.images[1]))
 
     def compute_matches(self, image_a: Image, image_b: Image) -> List:
         """
@@ -83,11 +66,24 @@ class MultiImageMatches:
             Matches between image_a and image_b.
         """
 
+        # bf = self.createMatcher(crossCheck=False)
+        # # compute the raw matches and initialize the list of actual matches
+        # rawMatches = bf.knnMatch(image_a.features, image_b.features, 2)
+        # print("Raw matches (knn):", len(rawMatches))
+        # matches = []
+
+        # # loop over the raw matches
+        # for m,n in rawMatches:
+        #     # ensure the distance is within a certain ratio of each
+        #     # other (i.e. Lowe's ratio test)
+        #     if m.distance < n.distance * self.ratio:
+        #         matches.append(m)
+        # return matches
+
         matcher = cv2.DescriptorMatcher_create("BruteForce")
         matches = []
 
         rawMatches = matcher.knnMatch(image_a.features, image_b.features, 2)
-        matches = []
 
         for m, n in rawMatches:
             # ensure the distance is within a certain ratio of each

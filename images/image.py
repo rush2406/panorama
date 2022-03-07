@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import imageio
 
 
 class Image:
@@ -30,11 +31,18 @@ class Image:
         self.component_id: int = 0
         self.gain: np.ndarray = np.ones(3, dtype=np.float32)
 
-    def compute_features(self):
+    def compute_features(self,method):
         """
         Compute the features and the keypoints of the image using SIFT.
         """
-        descriptor = cv2.SIFT_create()
+
+        if method == 'sift':
+            descriptor = cv2.SIFT_create()
+        elif method == 'brisk':
+            descriptor = cv2.BRISK_create()
+        elif method == 'orb':
+            descriptor = cv2.ORB_create()
+
         keypoints, features = descriptor.detectAndCompute(self.image, None)
         self.keypoints = keypoints
         self.features = features
